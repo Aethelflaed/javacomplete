@@ -23,6 +23,29 @@ function! javacomplete#disable()
 	augroup END
 endfunction
 
+function! javacomplete#android()
+  if glob('AndroidManifest.xml') =~ ''
+	let s:sdk_path = '/opt/android/sdk'
+	let s:local_file = g:project_path.'local.properties'
+	if filereadable(s:local_file)
+	  exec "vimgrep /sdk\.dir/j ".s:local_file
+	  let s:sdk_path = split(getqflist()[0].text, '=')[1]
+	endif
+	let s:project_file = g:project_path.'project.properties'
+	if filereadable(s:project_file)
+	  exec "vimgrep /target=/j ".s:project_file
+	  let s:target_plateform = split(getqflist()[0].text, '=')[1]
+	  let s:target_android_jar = s:sdk_path.'/platforms/'.s:target_plateform.'/android.jar'
+
+	  if $CLASSPATH =~ ''
+		let $CLASSPATH = s:target_android_jar.':'.$CLASSPATH
+	  else
+		let $CLASSPATH = s:target_android_jar
+	  endif
+	endif
+  endif
+endfunction
+
 " constants							{{{1
 " input context type
 let s:CONTEXT_AFTER_DOT		= 1
