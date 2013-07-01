@@ -1,11 +1,27 @@
 " Vim completion script	- hit 80% complete tasks
 " Version:	0.77.1.2
 " Language:	Java
-" Maintainer:	cheng fang <fangread@yahoo.com.cn>
-" Last Change:	2011-01-30
+" Maintainer:	Geoffroy Planquart <geoffroy@planquart.fr>
+" Former Maintainer:	cheng fang <fangread@yahoo.com.cn>
+" Last Change:	July 01 2013
 " Copyright:	Copyright (C) 2006-2007 cheng fang. All rights reserved.
 " License:	Vim License	(see vim's :help license)
 
+function! javacomplete#enable()
+	call javacomplete#disable()
+
+	augroup java
+		autocmd FileType java
+					\ setlocal omnifunc=javacomplete#Complete				|
+					\ setlocal completefunc=javacomplete#CompleteParamsInfo
+	augroup END
+endfunction
+
+function! javacomplete#disable()
+	augroup java
+		autocmd!
+	augroup END
+endfunction
 
 " constants							{{{1
 " input context type
